@@ -2,38 +2,32 @@ package com.example.backend;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class TaskRepo {
 
-    private List<Task> tasks = new ArrayList<>(List.of(
-            new Task("to do laundry", "1", TaskStatus.DONE),
-            new Task("to bring the car to the service", "2", TaskStatus.IN_PROGRESS),
-            new Task("to finish my coding exercises", "3", TaskStatus.OPEN)
+    private Map<Integer, Task> tasks = new HashMap<>(Map.of(
+            0, new Task("to do laundry", 0, TaskStatus.DONE),
+            1, new Task("to bring the car to the service", 1, TaskStatus.IN_PROGRESS),
+            2, new Task("to finish my coding exercises", 2, TaskStatus.OPEN)
     ));
 
     public boolean addTask(Task task) {
-        this.tasks.add(task);
+        int id = this.tasks.size();
+        task.setId(id);
+        this.tasks.put(id, task);
         return true;
     }
 
     public List<Task> getAllTasks() {
-        return this.tasks;
+        return this.tasks.values().stream().toList();
     }
 
-    public List<Task> getTaskByOpenStatus() {
-        return this.tasks.stream().filter(task -> task.getStatus() == TaskStatus.OPEN).toList();
-    }
-
-    public Task getTaskById(String id) {
-        for (Task task : this.tasks) {
-            if (task.getId().equals(id)) {
-                return task;
-            }
-        }
-        return null;
+    public Task getTaskById(int id) {
+        return this.tasks.get(id);
     }
 
     @Override
@@ -42,5 +36,13 @@ public class TaskRepo {
         sb.append("tasks=").append(tasks);
         sb.append('}');
         return sb.toString();
+    }
+
+    public Task editTask(Task task) {
+        return this.tasks.put(task.getId(), task);
+    }
+
+    public void deleteTask(int id) {
+        this.tasks.remove(id);
     }
 }

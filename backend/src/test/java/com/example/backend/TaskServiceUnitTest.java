@@ -9,35 +9,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TaskUnitTest {
+public class TaskServiceUnitTest {
 
     @Test
-    public void getTaskByIDWithMockito() {
+    public void getTaskByID() {
         // Given
         TaskRepo taskRepo = mock(TaskRepo.class);
         TaskService taskService = new TaskService(taskRepo);
 
         // When
-        String id = "1";
-        when(taskRepo.getTaskById(id)).thenReturn(new Task("to do laundry", "1", TaskStatus.OPEN));
+        int id = 1;
+        when(taskRepo.getTaskById(id)).thenReturn(new Task("to do laundry", 1, TaskStatus.OPEN));
         Task actual = taskService.getTaskById(id);
 
         // Then
-        assertEquals(new Task("to do laundry", "1", TaskStatus.OPEN), actual);
+        assertEquals(new Task("to do laundry", 1, TaskStatus.OPEN), actual);
     }
 
     @Test
-    public void getAllTasksWithMockito() {
+    public void getAllTasks() {
         // Given
         TaskRepo taskRepo = mock(TaskRepo.class);
         TaskService taskService = new TaskService(taskRepo);
-        List<Task> taskList = taskRepo.getAllTasks();
+        List<Task> taskList = new ArrayList<>(List.of(
+                new Task("to do my homework", 0, TaskStatus.OPEN),
+                new Task("to go shopping", 1, TaskStatus.IN_PROGRESS),
+                new Task("to do laundry", 2, TaskStatus.DONE)
+        ));
 
         // When
         when(taskRepo.getAllTasks()).thenReturn(taskList);
         List<Task> actual = taskService.getAllTasks();
         // Then
         assertEquals(taskList, actual);
-
     }
+
 }

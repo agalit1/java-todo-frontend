@@ -22,7 +22,7 @@ public class TaskService {
         return taskRepo.getAllTasks();
     }
 
-    public Task getTaskById(String id) {
+    public Task getTaskById(int id) {
         return taskRepo.getTaskById(id);
     }
 
@@ -32,5 +32,13 @@ public class TaskService {
         sb.append("taskRepo=").append(taskRepo);
         sb.append('}');
         return sb.toString();
+    }
+
+    public Task editTask(Task task) {
+        return this.taskRepo.editTask(task);
+    }
+
+    public void deleteTask(int id) {
+        this.taskRepo.deleteTask(id);
     }
 }
